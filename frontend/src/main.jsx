@@ -1,15 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import { ChakraProvider } from '@chakra-ui/react';
-import { BrowserRouter } from 'react-router-dom';
+import { MantineProvider, createTheme } from '@mantine/core';
+import App from './App';
+import '@mantine/core/styles.css';
+import './index.css';
+
+const theme = createTheme({
+  primaryColor: 'blue',
+  defaultRadius: 'md',
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
-    </BrowserRouter>
+    <MantineProvider theme={theme} defaultColorScheme="auto">
+      <App />
+    </MantineProvider>
   </React.StrictMode>
 );

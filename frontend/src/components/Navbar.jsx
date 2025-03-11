@@ -1,47 +1,65 @@
-import { Button, Container, Flex, HStack, Text, useColorMode } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-
-import { PlusSquareIcon } from '@chakra-ui/icons';
-import { IoMoon } from 'react-icons/io5';
-import { LuSun } from 'react-icons/lu';
+import { Button, Switch } from '@mantine/core';
+import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../hooks/useAuth';
+import useComponentLogger from '../hooks/useComponentLogger';
+import logger from '../utils/logger';
 
 const Navbar = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  useComponentLogger('Navbar');
+  const { theme, toggleTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLoggingToggle = () => {
+    if (logger.isEnabled()) {
+      logger.disable();
+    } else {
+      logger.enable();
+    }
+  };
 
   return (
-    <Container maxW={'1140px'} px={4}>
-      <Flex
-        h={16}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        flexDir={{
-          base: 'column',
-          sm: 'row',
-        }}
-      >
-        <Text
-          fontSize={{ base: '22', sm: '28' }}
-          fontWeight={'bold'}
-          textTransform={'uppercase'}
-          textAlign={'center'}
-          bgGradient={'linear(to-r, cyan.400, blue.500)'}
-          bgClip={'text'}
-        >
-          <Link to={'/'}>Product Store 🛒</Link>
-        </Text>
+    <nav className="bg-white dark:bg-gray-800 shadow-lg">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="text-xl font-bold">
+              MERN App
+            </Link>
+            {isAuthenticated && (
+              <Link to="/products" className="text-gray-600 dark:text-gray-300">
+                Products
+              </Link>
+            )}
+          </div>
 
-        <HStack spacing={2} alignItems={'center'}>
-          <Link to={'/create'}>
-            <Button>
-              <PlusSquareIcon fontSize={20} />
-            </Button>
-          </Link>
-          <Button onClick={toggleColorMode}>
-            {colorMode === 'light' ? <IoMoon /> : <LuSun size="20" />}
-          </Button>
-        </HStack>
-      </Flex>
-    </Container>
+          <div className="flex items-center space-x-4">
+            <Switch label="Logging" checked={logger.isEnabled()} onChange={handleLoggingToggle} />
+
+            <Switch label="Theme" checked={theme === 'dark'} onChange={toggleTheme} />
+
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <span>Welcome, {user?.username}</span>
+                <Button onClick={logout} color="red">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex space-x-2">
+                <Link to="/login">
+                  <Button variant="outline">Login</Button>
+                </Link>
+                <Link to="/register">
+                  <Button>Register</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 };
+
 export default Navbar;

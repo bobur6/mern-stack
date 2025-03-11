@@ -1,19 +1,49 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import { Route, Routes } from 'react-router-dom';
-
-import CreatePage from './pages/CreatePage';
-import HomePage from './pages/HomePage';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MantineProvider } from '@mantine/core';
+import { ThemeProvider } from './contexts/ThemeContext';
+import useComponentLogger from './hooks/useComponentLogger';
+import { useAuth } from './hooks/useAuth';
 import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Products from './pages/Products';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  useComponentLogger('App');
+  const { checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
-    <Box minH={'100vh'} bg={useColorModeValue('gray.100', 'gray.900')}>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/create" element={<CreatePage />} />
-      </Routes>
-    </Box>
+    <ThemeProvider>
+      <MantineProvider>
+        <Router>
+          <div className="app">
+            <Navbar />
+            <main className="container mx-auto px-4 py-8">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/products"
+                  element={
+                    <ProtectedRoute>
+                      <Products />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </MantineProvider>
+    </ThemeProvider>
   );
 }
 
