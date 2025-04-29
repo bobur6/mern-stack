@@ -1,9 +1,15 @@
 import mongoose from 'mongoose';
 import { Product } from '../models/product.model.js';
+import cache from '../cache.js';
 
 export const getProducts = async (req, res) => {
   try {
+    const cached = cache.get('products');
+    if (cached) {
+      return res.status(200).json({ success: true, data: cached });
+    }
     const products = await Product.find({});
+    cache.set('products', products);
     res.status(200).json({ success: true, data: products });
   } catch (error) {
     console.log('error in fetching products:', error.message);
@@ -22,6 +28,7 @@ export const createProduct = async (req, res) => {
 
   try {
     await newProduct.save();
+    cache.del('products'); // invalidate cache
     res.status(201).json({ success: true, data: newProduct });
   } catch (error) {
     console.error('Error in Create product:', error.message);
@@ -40,6 +47,7 @@ export const updateProduct = async (req, res) => {
 
   try {
     const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
+    cache.del('products'); // invalidate cache
     res.status(200).json({ success: true, data: updatedProduct });
   } catch (_) {
     res.status(500).json({ success: false, message: 'Server Error' });
@@ -55,6 +63,7 @@ export const deleteProduct = async (req, res) => {
 
   try {
     await Product.findByIdAndDelete(id);
+    cache.del('products'); // invalidate cache
     res.status(200).json({ success: true, message: 'Product deleted' });
   } catch (error) {
     console.log('error in deleting product:', error.message);
