@@ -10,7 +10,6 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
-  console.log('📌 req.body:', req.body); // 👈 Добавляем лог
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
