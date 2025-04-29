@@ -43,7 +43,7 @@ const Login = () => {
       <Paper
         shadow="md"
         p="xl"
-        className={`w-full max-w-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}
+        className={`w-full max-w-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black border border-gray-200'}`}
       >
         <Title order={2} className="text-center mb-6">
           Login to Your Account
@@ -65,8 +65,11 @@ const Login = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 
@@ -78,8 +81,11 @@ const Login = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 

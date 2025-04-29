@@ -61,6 +61,13 @@ npm run dev
 
 See `.env.example` for required environment variables.
 
+## Load Balancer
+
+This project uses an Nginx load balancer to distribute API requests between two backend containers (`backend1` and `backend2`). All `/api/*` requests are automatically balanced in round-robin fashion. You can check this by sending multiple requests to `/api/ping` and observing different responses from each backend.
+
+- The load balancer is defined in the `docker-compose.yml` and `nginx.conf`.
+- Both backend containers share the same MongoDB instance, so all API features (login, register, product management, etc.) work seamlessly.
+
 ## Project Structure
 
 ```

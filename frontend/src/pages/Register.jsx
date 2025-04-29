@@ -72,8 +72,11 @@ const Register = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 
@@ -86,8 +89,11 @@ const Register = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 
@@ -99,8 +105,11 @@ const Register = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 
@@ -112,8 +121,11 @@ const Register = () => {
             onChange={handleChange}
             disabled={isLoading}
             classNames={{
-              input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-              label: theme === 'dark' ? 'text-gray-200' : '',
+              input:
+                theme === 'dark'
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-black border-gray-300',
+              label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
             }}
           />
 

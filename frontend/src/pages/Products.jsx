@@ -50,14 +50,17 @@ const Products = () => {
   };
 
   const inputStyles = {
-    input: theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : '',
-    label: theme === 'dark' ? 'text-gray-200' : '',
+    input:
+      theme === 'dark'
+        ? 'bg-gray-700 text-white border-gray-600'
+        : 'bg-white text-black border-gray-300',
+    label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
   };
 
   return (
     <div className="space-y-8">
       <div
-        className={`p-6 rounded-lg shadow ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}
+        className={`p-6 rounded-lg shadow ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black border border-gray-200'}`}
       >
         <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
         <form onSubmit={handleSubmit} className="space-y-4">

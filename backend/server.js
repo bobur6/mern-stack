@@ -11,6 +11,7 @@ import { connectDB } from './config/db.js';
 import productRoutes from './routes/product.route.js';
 import fileRoutes from './routes/file.routes.js';
 import authRoutes from './routes/auth.route.js';
+import pingRoutes from './routes/ping.route.js';
 import { errorLogger, errorHandler } from './middleware/error.middleware.js';
 
 // Load environment variables
@@ -72,6 +73,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/api', pingRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/files', fileRoutes);
