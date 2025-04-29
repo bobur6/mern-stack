@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, Text, Button, Grid, TextInput, NumberInput } from '@mantine/core';
 import axios from 'axios';
 import useComponentLogger from '../hooks/useComponentLogger';
@@ -16,6 +16,8 @@ const Products = () => {
     description: '',
   });
   const [showForm, setShowForm] = useState(false);
+  const [search, setSearch] = useState('');
+  const [minPrice, setMinPrice] = useState(0);
 
   useEffect(() => {
     fetchProducts();
@@ -58,6 +60,19 @@ const Products = () => {
         : 'bg-white text-black border-gray-300',
     label: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
   };
+
+  // useMemo для фильтрации товаров
+  const filteredProducts = useMemo(() => {
+    return products.filter(
+      (p) => p.name.toLowerCase().includes(search.toLowerCase()) && p.price >= minPrice
+    );
+  }, [products, search, minPrice]);
+
+  // useMemo для средней цены
+  const averagePrice = useMemo(() => {
+    if (filteredProducts.length === 0) return 0;
+    return filteredProducts.reduce((sum, p) => sum + p.price, 0) / filteredProducts.length;
+  }, [filteredProducts]);
 
   return (
     <div className="space-y-8">
@@ -106,8 +121,30 @@ const Products = () => {
         )}
       </div>
 
+      {/* Фильтр и поиск */}
+      <div className="flex flex-col sm:flex-row gap-4 items-center mb-6">
+        <TextInput
+          placeholder="Search by name"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full sm:w-64"
+          classNames={inputStyles}
+        />
+        <NumberInput
+          placeholder="Min price"
+          value={minPrice}
+          onChange={setMinPrice}
+          min={0}
+          className="w-full sm:w-40"
+          classNames={inputStyles}
+        />
+        <Text className="ml-auto font-semibold">
+          Average price: {filteredProducts.length > 0 ? `$${averagePrice.toFixed(2)}` : '-'}
+        </Text>
+      </div>
+
       <Grid>
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Grid.Col key={product._id} span={{ base: 12, sm: 6, md: 4 }}>
             <Card
               shadow="sm"
