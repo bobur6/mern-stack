@@ -91,3 +91,42 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   }
   res.json(user);
 });
+
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  const { username, email } = req.body;
+  if (!username || !email) {
+    res.status(400);
+    throw new Error('Please provide username and email');
+  }
+
+  // Check for duplicate username or email (excluding self)
+  const usernameExists = await User.findOne({ username, _id: { $ne: user._id } });
+  if (usernameExists) {
+    res.status(400);
+    throw new Error('Username already taken');
+  }
+  const emailExists = await User.findOne({ email, _id: { $ne: user._id } });
+  if (emailExists) {
+    res.status(400);
+    throw new Error('Email already taken');
+  }
+
+  user.username = username;
+  user.email = email;
+  await user.save();
+
+  res.json({
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+  });
+});

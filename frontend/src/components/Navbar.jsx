@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Button, Switch } from '@mantine/core';
+import { Button, Switch, Avatar } from '@mantine/core';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../hooks/useAuth';
 import useComponentLogger from '../hooks/useComponentLogger';
@@ -40,7 +40,12 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span>Welcome, {user?.username}</span>
+                <Link to="/profile" className="flex items-center space-x-2 hover:underline">
+                  <Avatar color="blue" radius="xl" size="sm">
+                    {user?.username?.[0]?.toUpperCase()}
+                  </Avatar>
+                  <span>{user?.username}</span>
+                </Link>
                 <Button onClick={logout} color="red">
                   Logout
                 </Button>
