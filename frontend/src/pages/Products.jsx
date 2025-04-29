@@ -15,6 +15,7 @@ const Products = () => {
     price: 0,
     description: '',
   });
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -35,6 +36,7 @@ const Products = () => {
       await axios.post(`${API_URL}/api/products`, newProduct);
       setNewProduct({ name: '', price: 0, description: '' });
       fetchProducts();
+      setShowForm(false);
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -63,31 +65,45 @@ const Products = () => {
         className={`p-6 rounded-lg shadow ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black border border-gray-200'}`}
       >
         <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <TextInput
-            required
-            label="Name"
-            value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-            classNames={inputStyles}
-          />
-          <NumberInput
-            required
-            label="Price"
-            value={newProduct.price}
-            onChange={(value) => setNewProduct({ ...newProduct, price: value })}
-            min={0}
-            classNames={inputStyles}
-          />
-          <TextInput
-            required
-            label="Description"
-            value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-            classNames={inputStyles}
-          />
-          <Button type="submit">Add Product</Button>
-        </form>
+        {showForm ? (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <TextInput
+              required
+              label="Name"
+              value={newProduct.name}
+              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+              classNames={inputStyles}
+            />
+            <NumberInput
+              required
+              label="Price"
+              value={newProduct.price}
+              onChange={(value) => setNewProduct({ ...newProduct, price: value })}
+              min={0}
+              classNames={inputStyles}
+            />
+            <TextInput
+              required
+              label="Description"
+              value={newProduct.description}
+              onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+              classNames={inputStyles}
+            />
+            <div className="flex gap-2">
+              <Button type="submit">Add Product</Button>
+              <Button
+                variant="outline"
+                color="gray"
+                onClick={() => setShowForm(false)}
+                type="button"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <Button onClick={() => setShowForm(true)}>Add Product</Button>
+        )}
       </div>
 
       <Grid>
