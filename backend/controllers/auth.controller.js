@@ -130,3 +130,16 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     email: user.email,
   });
 });
+
+// @desc    Delete user profile
+// @route   DELETE /api/auth/profile
+// @access  Private
+export const deleteUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  await user.deleteOne();
+  res.json({ message: 'User deleted successfully' });
+});

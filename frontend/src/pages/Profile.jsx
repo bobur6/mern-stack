@@ -6,6 +6,24 @@ import axios from 'axios';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Profile = () => {
+  const handleDeleteAccount = async () => {
+    if (
+      !window.confirm('Are you sure you want to delete your account? This action cannot be undone.')
+    )
+      return;
+    setLoading(true);
+    setError('');
+    try {
+      await axios.delete('/api/auth/profile');
+      logout();
+      navigate('/login');
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const { theme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
   const [profile, setProfile] = useState(null);
@@ -101,6 +119,9 @@ const Profile = () => {
                 Logout
               </Button>
             </Group>
+            <Button color="red" variant="outline" fullWidth mt="md" onClick={handleDeleteAccount}>
+              Delete Account
+            </Button>
           </>
         ) : (
           <form onSubmit={handleUpdate} className="space-y-4">
