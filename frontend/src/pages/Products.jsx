@@ -10,23 +10,20 @@ const Products = () => {
   useComponentLogger('Products');
   const { theme } = useTheme();
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: 0,
-    description: '',
-  });
+  const [newProduct, setNewProduct] = useState({ name: '', price: 0, description: '' });
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState('');
   const [minPrice, setMinPrice] = useState(0);
+  const [stats, setStats] = useState({ avgPrice: 0, total: 0 });
 
   useEffect(() => {
-    fetchProducts();
+    axios.get(`${API_URL}/api/products/stats`).then((res) => setStats(res.data));
   }, []);
 
   const fetchProducts = async () => {
     try {
       const response = await axios.get(`${API_URL}/api/products`);
-      setProducts(response.data);
+      setProducts(response.data.data || []);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -121,6 +118,13 @@ const Products = () => {
         )}
       </div>
 
+      {/* Агрегированные статистики */}
+      <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
+        <Text className="font-semibold">
+          Total products: {stats.total} | Average price (MongoDB): ${stats.avgPrice?.toFixed(2)}
+        </Text>
+      </div>
+
       {/* Фильтр и поиск */}
       <div className="flex flex-col sm:flex-row gap-4 items-center mb-6">
         <TextInput
@@ -139,7 +143,8 @@ const Products = () => {
           classNames={inputStyles}
         />
         <Text className="ml-auto font-semibold">
-          Average price: {filteredProducts.length > 0 ? `$${averagePrice.toFixed(2)}` : '-'}
+          Average price (filtered):{' '}
+          {filteredProducts.length > 0 ? `$${averagePrice.toFixed(2)}` : '-'}
         </Text>
       </div>
 

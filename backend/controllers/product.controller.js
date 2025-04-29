@@ -54,6 +54,23 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+export const getProductStats = async (req, res) => {
+  try {
+    const stats = await Product.aggregate([
+      {
+        $group: {
+          _id: null,
+          avgPrice: { $avg: '$price' },
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    res.json(stats[0] || { avgPrice: 0, total: 0 });
+  } catch (error) {
+    res.status(500).json({ message: 'Aggregation error' });
+  }
+};
+
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 

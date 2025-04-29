@@ -1,8 +1,12 @@
 import express from 'express';
 import { Product } from '../models/product.model.js';
 import authMiddleware from '../middleware/auth.middleware.js';
+import { getProductStats } from '../controllers/product.controller.js';
 
 const router = express.Router();
+
+// ✅ Получить агрегированные статистики
+router.get('/stats', getProductStats);
 
 // ✅ Получить все продукты
 router.get('/', async (req, res) => {
