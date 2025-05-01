@@ -18,6 +18,7 @@ const Products = () => {
 
   useEffect(() => {
     axios.get(`${API_URL}/api/products/stats`).then((res) => setStats(res.data));
+    fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
